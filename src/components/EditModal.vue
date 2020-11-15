@@ -45,7 +45,17 @@
 
           <div class="my-4">
             <h5>自訂縮網址</h5>
-            <input class="form-control" v-model="edit" />
+            <input
+              name="edit-url"
+              class="form-control"
+              :class="{ 'is-invalid': errors.has('edit-url') }"
+              v-model="edit"
+              v-validate="'required'"
+              required
+            />
+            <span class="text-danger" v-if="errors.has('edit-url')"
+              >請輸入自訂編碼!(不可為空白)</span
+            >
             <!--綁定data內的edit，另外在一開始會先有資料，是透過watch先寫入的舊Encode，目的在提示使用者只須要改Encode-->
           </div>
 
@@ -141,8 +151,12 @@ export default {
             this.$bus.$emit("message:push", "轉換成功!", "success");
           }
         })
-        .catch((err) => {
-          this.$bus.$emit("message:push", err, "danger");
+        .catch(() => {
+          this.$bus.$emit(
+            "message:push",
+            "請確認格式! 或是當前伺服器錯誤!",
+            "danger"
+          );
         });
     },
     initCopy() {

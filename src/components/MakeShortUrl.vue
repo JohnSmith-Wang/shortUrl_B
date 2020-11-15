@@ -3,8 +3,12 @@
     <!--主要進行縮網址的區域-->
     <div class="input-group">
       <input
+        name="origna-url"
         class="form-control"
+        :class="{ 'is-invalid': errors.has('origna-url') }"
         v-model="url"
+        v-validate="'required'"
+        required
         placeholder="在此輸入您的網址"
       />
       <div class="input-group-append">
@@ -63,8 +67,12 @@ export default {
             this.$bus.$emit("message:push", "轉換成功!", "success"); //發送成功通知
           }
         })
-        .catch((err) => {
-          this.$bus.$emit("message:push", err, "danger"); //一旦錯誤時，會直接報錯(消極處理)
+        .catch(() => {
+          this.$bus.$emit(
+            "message:push",
+            "請確認格式! 或是當前伺服器錯誤!",
+            "danger"
+          ); //一旦錯誤時，會直接報錯(消極處理)
         });
     },
   },
